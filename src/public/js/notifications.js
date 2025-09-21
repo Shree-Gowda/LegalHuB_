@@ -1,3 +1,5 @@
+// Placeholder to ensure reference in layout remains valid if needed in future
+// Currently, notifications logic is embedded in navbar.ejs
 // public/js/notifications.js
 async function getVapidPublicKey() {
     const res = await fetch("/api/push/vapidPublicKey");

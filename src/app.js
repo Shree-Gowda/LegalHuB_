@@ -151,13 +151,17 @@ const sessionOptions = {
     },
 };
 
-// Only attach store when not in test env to avoid Jest open handle issues
-if (!IS_TEST) {
+// Only attach persistent session store when not in test env AND DB_URL is provided
+if (!IS_TEST && (process.env.DB_URL || process.env.MONGODB_URI)) {
     sessionOptions.store = MongoStore.create({
         mongoUrl: process.env.DB_URL || process.env.MONGODB_URI,
         collectionName: "sessions",
         ttl: 7 * 24 * 60 * 60, // 7 days
     });
+} else if (!IS_TEST) {
+    console.warn(
+        "Session store: Using in-memory store (no DB_URL provided). Suitable for development only."
+    );
 }
 
 app.use(session(sessionOptions));
